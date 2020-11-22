@@ -3,13 +3,14 @@ import yaml
 from flask_mysqldb import MySQL
 from authlib.integrations.flask_client import OAuth
 from functions.dbConfig import database_config
+import os
 
 
 
 app = Flask(__name__)
 
 
-env = "dev"
+env = ""
 DATABASE_URL = ""
 if env == "dev":
     dev = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
