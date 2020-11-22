@@ -54,13 +54,17 @@ google = oauth.register(
 
 @app.route("/")
 def home():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM students;")
-    data = cur.fetchall()
-    print(data)
 
-    return str(data)
+    user = dict(session).get("email", None)
+    if(user == "garvitgalgat@gmail.com"):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM students;")
+        data = cur.fetchall()
+        print(data)
 
+        return str(data)
+    else:
+        return "Not Authorized"
 
     
 @app.route("/login")
@@ -83,29 +87,8 @@ def authorize():
     session["signedIn"] = True
 
     
-    # Find admin mail in database (assuming garvitgalgat@gmail.com is admin)
-    if(email == "garvitgalgat@gmail.com"):
-        session["name"] = "ADMIN"
-        return redirect("/admin")
-
     
-    if email[:3] in ("cse") and email[-11:] == "@iiti.ac.in":
-        session["roll_no"] = email[3:12]
-        session["branch"] = email[:3].upper()
-        return redirect("/")
-    elif email[:2] in ("ee", "me", "ce") and email[-11:] == "@iiti.ac.in":
-        session["roll_no"] = email[2:11]
-        session["branch"] = email[:2].upper()
-        return redirect("/")
-    elif email[:4] in ("mems") and email[-11:] == "@iiti.ac.in":
-        session["roll_no"] = email[4:13]
-        session["branch"] = email[:4].upper()
-
-        return redirect("/")
-    else:
-        logout()
-        session["signedIn"] = False 
-        return redirect("/")
+    return redirect("/")
 
     
 
